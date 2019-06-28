@@ -1,0 +1,39 @@
+version: '3.4'
+x-environment:
+  &default-environment
+    DB_HOSTNAME: db
+    DB_USERNAME: postgres
+    DB_PASSWORD: postgres
+    POSTGRES_PASSWORD: postgres
+x-volumes:
+  &default-volumes
+    - .:/opt/railscodechallenge:delegated
+    - ~/.netrc:/root/.netrc
+
+volumes:
+  postgres-data:
+
+services:
+  db:
+    image: mdillon/postgis:10-alpine
+    ports:
+      - 5432:5432
+    environment: *default-environment
+    volumes:
+      - postgres-data:/var/lib/postgresql
+
+  web:
+    build: .
+    depends_on:
+      - db
+    links:
+      - db
+    environment: *default-environment
+    ports: ['5000:5000']
+    command: >
+      bash -c "
+        bundle exec puma -t 5:5 -w 1 -p 5000
+        # Run web server
+        "
+    volumes: *default-volumes
+
