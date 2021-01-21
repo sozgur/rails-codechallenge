@@ -12,7 +12,7 @@ gem "rgeo-geojson", "~> 2.0.0" # Encode and decode geojson
 gem "rgeo-proj4"
 gem "ffi-geos"
 # Use Puma as the app server
-gem 'puma', '~> 3.11'
+gem 'puma', '~> 3.12'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
