@@ -10,13 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_30_024728) do
+ActiveRecord::Schema.define(version: 2019_07_02_015926) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
   enable_extension "postgis"
   enable_extension "uuid-ossp"
+
+  create_table "reports", force: :cascade do |t|
+    t.uuid "scooter_id"
+    t.float "battery_level"
+    t.geography "lonlat", limit: {:srid=>4326, :type=>"st_point", :geographic=>true}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["lonlat"], name: "index_reports_on_lonlat", using: :gist
+  end
 
   create_table "scooters", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.float "battery_level"
@@ -33,4 +42,5 @@ ActiveRecord::Schema.define(version: 2019_06_30_024728) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "reports", "scooters"
 end
